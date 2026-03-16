@@ -53,80 +53,89 @@ export default function GuardDashboard() {
   const currentList = tabData[activeTab] || []
 
   const statusConfig: any = {
-    pending: { bg: '#E6F1FB', color: '#185FA5', label: 'Pending' },
-    inside: { bg: '#EAF3DE', color: '#3B6D11', label: 'Inside' },
-    checked_out: { bg: '#F1EFE8', color: '#5F5E5A', label: 'Out' },
+    pending: { cls: 'status status-pending', label: 'Pending' },
+    inside: { cls: 'status status-inside', label: 'Inside' },
+    checked_out: { cls: 'status status-out', label: 'Out' },
   }
 
   return (
-    <div style={{ maxWidth: '420px', margin: '0 auto', minHeight: '100vh', fontFamily: 'sans-serif' }}>
+    <div className="app-container">
 
-      <div style={{ backgroundColor: 'var(--color-background-primary, #fff)', borderBottom: '1px solid var(--color-border-tertiary, #eee)', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <h2 style={{ flex: 1, fontSize: '16px', fontWeight: '500', margin: '0', color: 'var(--color-text-primary)' }}>Dashboard</h2>
-        <span style={{ fontSize: '12px', background: '#E6F1FB', color: '#185FA5', padding: '3px 10px', borderRadius: '20px', fontWeight: '500' }}>{guardEmail}</span>
-        <button onClick={handleLogout} style={{ fontSize: '12px', color: '#A32D2D', padding: '4px 8px', border: '1px solid #FCEBEB', borderRadius: '8px', background: '#FCEBEB', cursor: 'pointer' }}>Sign out</button>
+      <div className="topbar">
+        <h2>Dashboard</h2>
+        <span className="badge">{guardEmail}</span>
+        <button className="logout-btn" onClick={handleLogout}>Sign out</button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', padding: '16px 16px 0' }}>
+      <div className="stats-grid">
         {[
-          { num: pending.length, label: 'Pending', color: '#185FA5' },
-          { num: inside.length, label: 'Inside', color: '#3B6D11' },
-          { num: checkedout.length, label: 'Checked out', color: '#5F5E5A' },
+          { num: pending.length, label: 'Pending', color: 'var(--primary)' },
+          { num: inside.length, label: 'Inside', color: 'var(--success)' },
+          { num: checkedout.length, label: 'Checked out', color: 'var(--gray)' },
         ].map((s, i) => (
-          <div key={i} style={{ backgroundColor: 'var(--color-background-primary, #fff)', border: '1px solid var(--color-border-tertiary, #eee)', borderRadius: '8px', padding: '12px 10px', textAlign: 'center' }}>
-            <div style={{ fontSize: '22px', fontWeight: '500', color: s.color }}>{s.num}</div>
-            <div style={{ fontSize: '11px', color: 'var(--color-text-secondary, #888)', marginTop: '2px' }}>{s.label}</div>
+          <div key={i} className="stat-card">
+            <div className="num" style={{ color: s.color }}>{s.num}</div>
+            <div className="lbl">{s.label}</div>
           </div>
         ))}
       </div>
 
-      <div style={{ display: 'flex', backgroundColor: 'var(--color-background-primary, #fff)', borderBottom: '1px solid var(--color-border-tertiary, #eee)', marginTop: '16px' }}>
+      <div className="tabs">
         {[['today', 'Today'], ['inside', 'Inside'], ['history', 'History']].map(([key, label]) => (
-          <button key={key} onClick={() => setActiveTab(key)} style={{ flex: 1, padding: '12px 0', fontSize: '13px', background: 'none', border: 'none', borderBottom: activeTab === key ? '2px solid #185FA5' : '2px solid transparent', color: activeTab === key ? '#185FA5' : 'var(--color-text-secondary, #888)', fontWeight: activeTab === key ? '500' : '400', cursor: 'pointer' }}>
+          <button key={key} className={`tab ${activeTab === key ? 'active' : ''}`} onClick={() => setActiveTab(key)}>
             {label}
           </button>
         ))}
       </div>
 
-      <div style={{ padding: '12px 16px 0' }}>
+      <div className="search-wrap">
         <div style={{ position: 'relative' }}>
-          <span style={{ position: 'absolute', left: '11px', top: '50%', transform: 'translateY(-50%)', fontSize: '14px' }}>🔍</span>
-          <input type="text" placeholder="Search by name, unit or plate..." value={search} onChange={e => setSearch(e.target.value)}
-            style={{ width: '100%', padding: '10px 12px 10px 32px', border: '1px solid var(--color-border-tertiary, #eee)', borderRadius: '8px', fontSize: '14px', backgroundColor: 'var(--color-background-primary, #fff)', color: 'var(--color-text-primary, #000)', boxSizing: 'border-box' }} />
+          <span className="search-icon">🔍</span>
+          <input
+            type="text"
+            placeholder="Search by name, unit or plate..."
+            value={search}
+            onChange={e => setSearch(e.target.value)} />
         </div>
       </div>
 
-      <div style={{ padding: '12px 16px 100px' }}>
+      <div className="content">
         {loading ? (
-          <p style={{ textAlign: 'center', color: 'var(--color-text-secondary, #888)', fontSize: '13px', padding: '32px' }}>Loading...</p>
+          <p style={{ textAlign: 'center', padding: '32px', opacity: 0.5, fontSize: '13px' }}>Loading...</p>
         ) : currentList.length === 0 ? (
-          <p style={{ textAlign: 'center', color: 'var(--color-text-secondary, #888)', fontSize: '13px', padding: '32px' }}>No visitors found</p>
+          <p style={{ textAlign: 'center', padding: '32px', opacity: 0.5, fontSize: '13px' }}>No visitors found</p>
         ) : currentList.map((v: any) => {
           const s = statusConfig[v.status] || statusConfig.pending
           return (
-            <div key={v.id} onClick={() => window.location.href = `/guard/verify/${v.id}`}
-              style={{ backgroundColor: 'var(--color-background-primary, #fff)', border: '1px solid var(--color-border-tertiary, #eee)', borderRadius: '12px', padding: '14px', marginBottom: '10px', cursor: 'pointer' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#E6F1FB', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: '500', color: '#185FA5', flexShrink: 0 }}>
+            <div key={v.id} className="card" style={{ cursor: 'pointer' }} onClick={() => window.location.href = `/guard/verify/${v.id}`}>
+              <div className="card-row">
+                <div className="avatar">
                   {v.name?.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2) || '??'}
                 </div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <h3 style={{ fontSize: '14px', fontWeight: '500', margin: '0 0 2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'var(--color-text-primary)' }}>{v.name}</h3>
-                  <p style={{ fontSize: '12px', color: 'var(--color-text-secondary, #888)', margin: '0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    Unit {v.unit} · {v.expected_time || '-'} · {v.plate || 'No plate'}
-                  </p>
+                <div className="card-info">
+                  <h3>{v.name}</h3>
+                  <p>Unit {v.unit} · {v.expected_time || '-'} · {v.plate || 'No plate'}</p>
                 </div>
-                <span style={{ fontSize: '11px', padding: '3px 9px', borderRadius: '20px', fontWeight: '500', background: s.bg, color: s.color, flexShrink: 0 }}>{s.label}</span>
+                <span className={s.cls}>{s.label}</span>
               </div>
             </div>
           )
         })}
       </div>
 
-      <div style={{ position: 'fixed', bottom: 0, left: '50%', transform: 'translateX(-50%)', width: '100%', maxWidth: '420px', backgroundColor: 'var(--color-background-primary, #fff)', borderTop: '1px solid var(--color-border-tertiary, #eee)', display: 'flex' }}>
-        <button style={{ flex: 1, padding: '12px 0 10px', background: 'none', border: 'none', fontSize: '11px', color: '#185FA5', cursor: 'pointer' }}>📊 Dashboard</button>
-        <button onClick={() => window.location.href = '/guard/scan'} style={{ flex: 1, padding: '12px 0 10px', background: 'none', border: 'none', fontSize: '11px', color: 'var(--color-text-secondary, #888)', cursor: 'pointer' }}>📷 Scan</button>
-        <button onClick={() => window.location.href = '/guard/walkin'} style={{ flex: 1, padding: '12px 0 10px', background: 'none', border: 'none', fontSize: '11px', color: 'var(--color-text-secondary, #888)', cursor: 'pointer' }}>➕ Walk-in</button>
+      <div className="bottomnav">
+        <button className="active">
+          <span className="nav-icon">📊</span>
+          Dashboard
+        </button>
+        <button onClick={() => window.location.href = '/guard/scan'}>
+          <span className="nav-icon">📷</span>
+          Scan
+        </button>
+        <button onClick={() => window.location.href = '/guard/walkin'}>
+          <span className="nav-icon">➕</span>
+          Walk-in
+        </button>
       </div>
 
     </div>
