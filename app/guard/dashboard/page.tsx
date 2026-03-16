@@ -59,7 +59,7 @@ export default function GuardDashboard() {
   }
 
   return (
-    <div style={{ maxWidth: '420px', margin: '0 auto', minHeight: '100vh', fontFamily: 'sans-serif', backgroundColor: 'var(--color-background-tertiary, #F8F9FA)' }}>
+    <div style={{ maxWidth: '420px', margin: '0 auto', minHeight: '100vh', fontFamily: 'sans-serif' }}>
 
       <div style={{ backgroundColor: 'var(--color-background-primary, #fff)', borderBottom: '1px solid var(--color-border-tertiary, #eee)', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '10px' }}>
         <h2 style={{ flex: 1, fontSize: '16px', fontWeight: '500', margin: '0', color: 'var(--color-text-primary)' }}>Dashboard</h2>
