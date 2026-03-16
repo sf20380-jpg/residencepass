@@ -45,7 +45,7 @@ export default function GuardLogin() {
               placeholder="e.g. G001"
               value={guardId}
               onChange={e => setGuardId(e.target.value)}
-              style={{ width: '100%', padding: '10px 12px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '14px', boxSizing: 'border-box' }} />
+              style={{ width: '100%', padding: '10px 12px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '14px', boxSizing: 'border-box', color: '#000', background: '#fff' }} />
           </div>
 
           <div style={{ marginBottom: '24px' }}>
@@ -56,7 +56,7 @@ export default function GuardLogin() {
               placeholder="••••••"
               value={password}
               onChange={e => setPassword(e.target.value)}
-              style={{ width: '100%', padding: '10px 12px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '14px', boxSizing: 'border-box' }} />
+              style={{ width: '100%', padding: '10px 12px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '14px', boxSizing: 'border-box', color: '#000', background: '#fff' }} />
           </div>
 
           {error && (
