@@ -13,7 +13,7 @@ export default function GuardLogin() {
     setLoading(true)
     setError('')
 
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
       email: `${guardId}@residencepass.local`,
       password: password
     })
@@ -28,46 +28,35 @@ export default function GuardLogin() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', fontFamily: 'sans-serif' }}>
-      <div style={{ background: '#185FA5', padding: '48px 24px 32px', textAlign: 'center' }}>
-        <div style={{ width: '56px', height: '56px', background: 'rgba(255,255,255,0.15)', borderRadius: '16px', margin: '0 auto 16px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px' }}>🛡️</div>
-        <h1 style={{ color: '#fff', fontSize: '22px', fontWeight: '500', margin: '0 0 6px' }}>Guard Portal</h1>
+    <div className="app-container">
+      <div style={{ background: 'var(--primary)', padding: '56px 24px 40px', textAlign: 'center' }}>
+        <div style={{ width: '64px', height: '64px', background: 'rgba(255,255,255,0.15)', borderRadius: '18px', margin: '0 auto 20px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '28px' }}>🛡️</div>
+        <h1 style={{ color: '#fff', fontSize: '22px', fontWeight: '700', margin: '0 0 6px' }}>Guard Portal</h1>
         <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '13px', margin: '0' }}>Sign in to continue</p>
       </div>
 
-      <div style={{ maxWidth: '420px', margin: '0 auto', padding: '24px' }}>
+      <div style={{ padding: '28px 16px' }}>
         <form onSubmit={handleLogin}>
-          <div style={{ marginBottom: '14px' }}>
-            <label style={{ fontSize: '12px', color: '#666', display: 'block', marginBottom: '5px' }}>Guard ID</label>
-            <input
-              type="text"
-              required
-              placeholder="e.g. G001"
-              value={guardId}
-              onChange={e => setGuardId(e.target.value)}
-              style={{ width: '100%', padding: '10px 12px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '14px', boxSizing: 'border-box', color: '#000', background: '#fff' }} />
+          <div className="field">
+            <label>Guard ID</label>
+            <input type="text" required placeholder="e.g. G001" value={guardId} onChange={e => setGuardId(e.target.value)} />
           </div>
-
-          <div style={{ marginBottom: '24px' }}>
-            <label style={{ fontSize: '12px', color: '#666', display: 'block', marginBottom: '5px' }}>Password</label>
-            <input
-              type="password"
-              required
-              placeholder="••••••"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              style={{ width: '100%', padding: '10px 12px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '14px', boxSizing: 'border-box', color: '#000', background: '#fff' }} />
+          <div className="field">
+            <label>Password</label>
+            <input type="password" required placeholder="••••••" value={password} onChange={e => setPassword(e.target.value)} />
           </div>
 
           {error && (
-            <div style={{ background: '#FCEBEB', border: '1px solid #f0b0b0', borderRadius: '8px', padding: '10px 12px', marginBottom: '16px' }}>
-              <p style={{ color: '#A32D2D', fontSize: '13px', margin: '0' }}>❌ {error}</p>
+            <div style={{ background: 'var(--danger-light)', border: '0.5px solid var(--danger)', borderRadius: '10px', padding: '10px 12px', marginBottom: '16px' }}>
+              <p style={{ color: 'var(--danger)', fontSize: '13px', margin: '0' }}>❌ {error}</p>
             </div>
           )}
 
-          <button type="submit" disabled={loading}
-            style={{ width: '100%', padding: '13px', background: '#185FA5', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '14px', fontWeight: '500', cursor: 'pointer' }}>
+          <button type="submit" className="btn btn-primary" disabled={loading}>
             {loading ? 'Signing in...' : 'Sign In'}
+          </button>
+          <button type="button" className="btn btn-outline" onClick={() => window.location.href = '/'}>
+            Back
           </button>
         </form>
       </div>
