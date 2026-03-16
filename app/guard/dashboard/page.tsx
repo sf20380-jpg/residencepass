@@ -55,18 +55,16 @@ export default function GuardDashboard() {
   const tabData: any = { today: filtered, inside, history: checkedout }
   const currentList = tabData[activeTab] || []
 
-  function getStatusBadge(status: string) {
+function getStatusBadge(status: string) {
     const styles: any = {
       pending: { bg: '#E6F1FB', color: '#185FA5', label: 'Pending' },
       inside: { bg: '#EAF3DE', color: '#3B6D11', label: 'Inside' },
       checked_out: { bg: '#F1EFE8', color: '#5F5E5A', label: 'Out' },
     }
     const s = styles[status] || styles.pending
-    return (
-      <span style={{ fontSize: '11px', padding: '3px 9px', borderRadius: '20px', fontWeight: '500', background: s.bg, color: s.color, flexShrink: 0 }}>
-        {s.label}
-      </span>
-    )
+    return React.createElement('span', {
+      style: { fontSize: '11px', padding: '3px 9px', borderRadius: '20px', fontWeight: '500', background: s.bg, color: s.color, flexShrink: 0 }
+    }, s.label)
   }
 
   function getInitials(name: string) {
