@@ -76,19 +76,16 @@ export default function GuardDashboard() {
   return (
     <div style={{ maxWidth: '420px', margin: '0 auto', minHeight: '100vh', fontFamily: 'sans-serif', backgroundColor: 'var(--color-background-tertiary, #F8F9FA)' }}>
 
-      {/* Topbar */}
       <div style={{ backgroundColor: 'var(--color-background-primary, #fff)', borderBottom: '1px solid var(--color-border-tertiary, #eee)', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '10px' }}>
         <h2 style={{ flex: 1, fontSize: '16px', fontWeight: '500', margin: '0', color: 'var(--color-text-primary)' }}>Dashboard</h2>
         <span style={{ fontSize: '12px', background: '#E6F1FB', color: '#185FA5', padding: '3px 10px', borderRadius: '20px', fontWeight: '500' }}>
           {guardEmail}
         </span>
-        <button onClick={handleLogout}
-          style={{ fontSize: '12px', color: '#A32D2D', padding: '4px 8px', border: '1px solid #FCEBEB', borderRadius: '8px', background: '#FCEBEB', cursor: 'pointer' }}>
+        <button onClick={handleLogout} style={{ fontSize: '12px', color: '#A32D2D', padding: '4px 8px', border: '1px solid #FCEBEB', borderRadius: '8px', background: '#FCEBEB', cursor: 'pointer' }}>
           Sign out
         </button>
       </div>
 
-      {/* Stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', padding: '16px 16px 0' }}>
         {[
           { num: pending.length, label: 'Pending', color: '#185FA5' },
@@ -102,48 +99,33 @@ export default function GuardDashboard() {
         ))}
       </div>
 
-      {/* Tabs */}
       <div style={{ display: 'flex', backgroundColor: 'var(--color-background-primary, #fff)', borderBottom: '1px solid var(--color-border-tertiary, #eee)', marginTop: '16px' }}>
         {[['today', 'Today'], ['inside', 'Inside'], ['history', 'History']].map(([key, label]) => (
-          <button key={key} onClick={() => setActiveTab(key)}
-            style={{ flex: 1, padding: '12px 0', fontSize: '13px', background: 'none', border: 'none', borderBottom: activeTab === key ? '2px solid #185FA5' : '2px solid transparent', color: activeTab === key ? '#185FA5' : 'var(--color-text-secondary, #888)', fontWeight: activeTab === key ? '500' : '400', cursor: 'pointer' }}>
+          <button key={key} onClick={() => setActiveTab(key)} style={{ flex: 1, padding: '12px 0', fontSize: '13px', background: 'none', border: 'none', borderBottom: activeTab === key ? '2px solid #185FA5' : '2px solid transparent', color: activeTab === key ? '#185FA5' : 'var(--color-text-secondary, #888)', fontWeight: activeTab === key ? '500' : '400', cursor: 'pointer' }}>
             {label}
           </button>
         ))}
       </div>
 
-      {/* Search */}
       <div style={{ padding: '12px 16px 0' }}>
         <div style={{ position: 'relative' }}>
-          <span style={{ position: 'absolute', left: '11px', top: '50%', transform: 'translateY(-50%)', color: 'var(--color-text-secondary, #aaa)', fontSize: '14px' }}>🔍</span>
+          <span style={{ position: 'absolute', left: '11px', top: '50%', transform: 'translateY(-50%)', fontSize: '14px' }}>🔍</span>
           <input
             type="text"
             placeholder="Search by name, unit or plate..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '10px 12px 10px 32px',
-              border: '1px solid var(--color-border-tertiary, #eee)',
-              borderRadius: '8px',
-              fontSize: '14px',
-              backgroundColor: 'var(--color-background-primary, #fff)',
-              color: 'var(--color-text-primary, #000)',
-              boxSizing: 'border-box'
-            }} />
+            style={{ width: '100%', padding: '10px 12px 10px 32px', border: '1px solid var(--color-border-tertiary, #eee)', borderRadius: '8px', fontSize: '14px', backgroundColor: 'var(--color-background-primary, #fff)', color: 'var(--color-text-primary, #000)', boxSizing: 'border-box' }} />
         </div>
       </div>
 
-      {/* List */}
       <div style={{ padding: '12px 16px 100px' }}>
         {loading ? (
           <p style={{ textAlign: 'center', color: 'var(--color-text-secondary, #888)', fontSize: '13px', padding: '32px' }}>Loading...</p>
         ) : currentList.length === 0 ? (
           <p style={{ textAlign: 'center', color: 'var(--color-text-secondary, #888)', fontSize: '13px', padding: '32px' }}>No visitors found</p>
         ) : currentList.map((v: any) => (
-          <div key={v.id}
-            onClick={() => window.location.href = `/guard/verify/${v.id}`}
-            style={{ backgroundColor: 'var(--color-background-primary, #fff)', border: '1px solid var(--color-border-tertiary, #eee)', borderRadius: '12px', padding: '14px', marginBottom: '10px', cursor: 'pointer' }}>
+          <div key={v.id} onClick={() => window.location.href = `/guard/verify/${v.id}`} style={{ backgroundColor: 'var(--color-background-primary, #fff)', border: '1px solid var(--color-border-tertiary, #eee)', borderRadius: '12px', padding: '14px', marginBottom: '10px', cursor: 'pointer' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#E6F1FB', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: '500', color: '#185FA5', flexShrink: 0 }}>
                 {getInitials(v.name)}
@@ -160,20 +142,18 @@ export default function GuardDashboard() {
         ))}
       </div>
 
-      {/* Bottom Nav */}
       <div style={{ position: 'fixed', bottom: 0, left: '50%', transform: 'translateX(-50%)', width: '100%', maxWidth: '420px', backgroundColor: 'var(--color-background-primary, #fff)', borderTop: '1px solid var(--color-border-tertiary, #eee)', display: 'flex' }}>
         <button style={{ flex: 1, padding: '12px 0 10px', background: 'none', border: 'none', fontSize: '11px', color: '#185FA5', cursor: 'pointer' }}>
           📊 Dashboard
         </button>
-        <button onClick={() => window.location.href = '/guard/scan'}
-          style={{ flex: 1, padding: '12px 0 10px', background: 'none', border: 'none', fontSize: '11px', color: 'var(--color-text-secondary, #888)', cursor: 'pointer' }}>
+        <button onClick={() => window.location.href = '/guard/scan'} style={{ flex: 1, padding: '12px 0 10px', background: 'none', border: 'none', fontSize: '11px', color: 'var(--color-text-secondary, #888)', cursor: 'pointer' }}>
           📷 Scan
         </button>
-        <button onClick={() => window.location.href = '/guard/walkin'}
-          style={{ flex: 1, padding: '12px 0 10px', background: 'none', border: 'none', fontSize: '11px', color: 'var(--color-text-secondary, #888)', cursor: 'pointer' }}>
+        <button onClick={() => window.location.href = '/guard/walkin'} style={{ flex: 1, padding: '12px 0 10px', background: 'none', border: 'none', fontSize: '11px', color: 'var(--color-text-secondary, #888)', cursor: 'pointer' }}>
           ➕ Walk-in
         </button>
       </div>
+
     </div>
   )
 }
