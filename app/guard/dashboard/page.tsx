@@ -115,4 +115,65 @@ export default function GuardDashboard() {
       {/* Search */}
       <div style={{ padding: '12px 16px 0' }}>
         <div style={{ position: 'relative' }}>
-          <spa
+          <span style={{ position: 'absolute', left: '11px', top: '50%', transform: 'translateY(-50%)', color: 'var(--color-text-secondary, #aaa)', fontSize: '14px' }}>🔍</span>
+          <input
+            type="text"
+            placeholder="Search by name, unit or plate..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '10px 12px 10px 32px',
+              border: '1px solid var(--color-border-tertiary, #eee)',
+              borderRadius: '8px',
+              fontSize: '14px',
+              backgroundColor: 'var(--color-background-primary, #fff)',
+              color: 'var(--color-text-primary, #000)',
+              boxSizing: 'border-box'
+            }} />
+        </div>
+      </div>
+
+      {/* List */}
+      <div style={{ padding: '12px 16px 100px' }}>
+        {loading ? (
+          <p style={{ textAlign: 'center', color: 'var(--color-text-secondary, #888)', fontSize: '13px', padding: '32px' }}>Loading...</p>
+        ) : currentList.length === 0 ? (
+          <p style={{ textAlign: 'center', color: 'var(--color-text-secondary, #888)', fontSize: '13px', padding: '32px' }}>No visitors found</p>
+        ) : currentList.map((v: any) => (
+          <div key={v.id}
+            onClick={() => window.location.href = `/guard/verify/${v.id}`}
+            style={{ backgroundColor: 'var(--color-background-primary, #fff)', border: '1px solid var(--color-border-tertiary, #eee)', borderRadius: '12px', padding: '14px', marginBottom: '10px', cursor: 'pointer' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#E6F1FB', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: '500', color: '#185FA5', flexShrink: 0 }}>
+                {getInitials(v.name)}
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <h3 style={{ fontSize: '14px', fontWeight: '500', margin: '0 0 2px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'var(--color-text-primary)' }}>{v.name}</h3>
+                <p style={{ fontSize: '12px', color: 'var(--color-text-secondary, #888)', margin: '0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  Unit {v.unit} · {v.expected_time || '-'} · {v.plate || 'No plate'}
+                </p>
+              </div>
+              {getStatusBadge(v.status)}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Bottom Nav */}
+      <div style={{ position: 'fixed', bottom: 0, left: '50%', transform: 'translateX(-50%)', width: '100%', maxWidth: '420px', backgroundColor: 'var(--color-background-primary, #fff)', borderTop: '1px solid var(--color-border-tertiary, #eee)', display: 'flex' }}>
+        <button style={{ flex: 1, padding: '12px 0 10px', background: 'none', border: 'none', fontSize: '11px', color: '#185FA5', cursor: 'pointer' }}>
+          📊 Dashboard
+        </button>
+        <button onClick={() => window.location.href = '/guard/scan'}
+          style={{ flex: 1, padding: '12px 0 10px', background: 'none', border: 'none', fontSize: '11px', color: 'var(--color-text-secondary, #888)', cursor: 'pointer' }}>
+          📷 Scan
+        </button>
+        <button onClick={() => window.location.href = '/guard/walkin'}
+          style={{ flex: 1, padding: '12px 0 10px', background: 'none', border: 'none', fontSize: '11px', color: 'var(--color-text-secondary, #888)', cursor: 'pointer' }}>
+          ➕ Walk-in
+        </button>
+      </div>
+    </div>
+  )
+}
