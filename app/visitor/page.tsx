@@ -32,74 +32,64 @@ export default function VisitorPage() {
       return
     }
 
-    window.location.href = `/visitor/success?otp=${otp}&token=${token}&name=${form.name}&unit=${form.unit}`
+    window.location.href = `/visitor/success?otp=${otp}&token=${token}&name=${encodeURIComponent(form.name)}&unit=${encodeURIComponent(form.unit)}&phone=${encodeURIComponent(form.phone)}&plate=${encodeURIComponent(form.plate)}`
   }
 
   return (
-    <div style={{ maxWidth: '420px', margin: '0 auto', padding: '24px', fontFamily: 'sans-serif' }}>
-      <h2 style={{ color: '#185FA5' }}>Register Visitor</h2>
-      <p style={{ color: '#888', fontSize: '13px', marginBottom: '24px' }}>No login required</p>
+    <div className="app-container">
 
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '14px' }}>
-          <label style={{ fontSize: '12px', color: '#666', display: 'block', marginBottom: '5px' }}>Visitor Name *</label>
-          <input name="name" required onChange={handleChange} placeholder="e.g. John Smith"
-            style={{ width: '100%', padding: '10px 12px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '14px' }} />
-        </div>
+      <div style={{ background: 'var(--primary)', padding: '40px 24px 32px', textAlign: 'center' }}>
+        <div style={{ width: '56px', height: '56px', background: 'rgba(255,255,255,0.15)', borderRadius: '16px', margin: '0 auto 16px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px' }}>🏠</div>
+        <h1 style={{ color: '#fff', fontSize: '22px', fontWeight: '700', margin: '0 0 6px' }}>Register Visitor</h1>
+        <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '13px', margin: '0' }}>No login required</p>
+      </div>
 
-        <div style={{ marginBottom: '14px' }}>
-          <label style={{ fontSize: '12px', color: '#666', display: 'block', marginBottom: '5px' }}>Phone Number *</label>
-          <input name="phone" required onChange={handleChange} placeholder="e.g. 012-3456789"
-            style={{ width: '100%', padding: '10px 12px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '14px' }} />
-        </div>
+      <div style={{ padding: '20px 16px' }}>
+        <form onSubmit={handleSubmit}>
+          <div className="field">
+            <label>Visitor Name *</label>
+            <input type="text" name="name" required placeholder="e.g. John Smith" onChange={handleChange} />
+          </div>
+          <div className="field">
+            <label>Phone Number *</label>
+            <input type="tel" name="phone" required placeholder="e.g. 012-3456789" onChange={handleChange} />
+          </div>
+          <div className="field">
+            <label>Vehicle Plate No.</label>
+            <input type="text" name="plate" placeholder="e.g. WXY 1234" onChange={handleChange} />
+          </div>
+          <div className="field">
+            <label>Unit to Visit *</label>
+            <input type="text" name="unit" required placeholder="e.g. A-12-5" onChange={handleChange} />
+          </div>
+          <div className="field">
+            <label>Resident's Name *</label>
+            <input type="text" name="host_name" required placeholder="e.g. Sarah Johnson" onChange={handleChange} />
+          </div>
+          <div className="field">
+            <label>Visit Date *</label>
+            <input type="date" name="visit_date" required onChange={handleChange} />
+          </div>
+          <div className="field">
+            <label>Expected Arrival Time</label>
+            <input type="time" name="expected_time" onChange={handleChange} />
+          </div>
+          <div className="field">
+            <label>Purpose of Visit</label>
+            <select name="purpose" onChange={handleChange}>
+              <option>Family visit</option>
+              <option>Delivery</option>
+              <option>Contractor / work</option>
+              <option>Friend / guest</option>
+              <option>Other</option>
+            </select>
+          </div>
 
-        <div style={{ marginBottom: '14px' }}>
-          <label style={{ fontSize: '12px', color: '#666', display: 'block', marginBottom: '5px' }}>Vehicle Plate No.</label>
-          <input name="plate" onChange={handleChange} placeholder="e.g. WXY 1234"
-            style={{ width: '100%', padding: '10px 12px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '14px' }} />
-        </div>
-
-        <div style={{ marginBottom: '14px' }}>
-          <label style={{ fontSize: '12px', color: '#666', display: 'block', marginBottom: '5px' }}>Unit to Visit *</label>
-          <input name="unit" required onChange={handleChange} placeholder="e.g. A-12-05"
-            style={{ width: '100%', padding: '10px 12px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '14px' }} />
-        </div>
-
-        <div style={{ marginBottom: '14px' }}>
-          <label style={{ fontSize: '12px', color: '#666', display: 'block', marginBottom: '5px' }}>Resident Name *</label>
-          <input name="host_name" required onChange={handleChange} placeholder="e.g. Sarah Johnson"
-            style={{ width: '100%', padding: '10px 12px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '14px' }} />
-        </div>
-
-        <div style={{ marginBottom: '14px' }}>
-          <label style={{ fontSize: '12px', color: '#666', display: 'block', marginBottom: '5px' }}>Visit Date *</label>
-          <input name="visit_date" type="date" required onChange={handleChange}
-            style={{ width: '100%', padding: '10px 12px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '14px' }} />
-        </div>
-
-        <div style={{ marginBottom: '14px' }}>
-          <label style={{ fontSize: '12px', color: '#666', display: 'block', marginBottom: '5px' }}>Expected Arrival Time</label>
-          <input name="expected_time" type="time" onChange={handleChange}
-            style={{ width: '100%', padding: '10px 12px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '14px' }} />
-        </div>
-
-        <div style={{ marginBottom: '24px' }}>
-          <label style={{ fontSize: '12px', color: '#666', display: 'block', marginBottom: '5px' }}>Purpose of Visit</label>
-          <select name="purpose" onChange={handleChange}
-            style={{ width: '100%', padding: '10px 12px', border: '1px solid #ddd', borderRadius: '8px', fontSize: '14px' }}>
-            <option>Family visit</option>
-            <option>Delivery</option>
-            <option>Contractor / work</option>
-            <option>Friend / guest</option>
-            <option>Other</option>
-          </select>
-        </div>
-
-        <button type="submit" disabled={loading}
-          style={{ width: '100%', padding: '13px', background: '#185FA5', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '14px', fontWeight: '500', cursor: 'pointer' }}>
-          {loading ? 'Generating...' : 'Generate Access Code'}
-        </button>
-      </form>
+          <button type="submit" className="btn btn-primary" disabled={loading}>
+            {loading ? 'Generating...' : 'Generate Access Code'}
+          </button>
+        </form>
+      </div>
     </div>
   )
 }
