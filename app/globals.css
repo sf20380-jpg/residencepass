@@ -57,6 +57,7 @@ input, select, button, textarea {
   max-width: 420px;
   margin: 0 auto;
   min-height: 100vh;
+  height: 100%;
   background-color: var(--bg2);
 }
 
