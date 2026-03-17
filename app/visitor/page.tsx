@@ -38,6 +38,10 @@ export default function VisitorPage() {
   return (
     <div className="app-container">
 
+      <div className="topbar">
+        <button className="back-btn" onClick={() => window.location.href = '/'}>←</button>
+        <h2>Register Visitor</h2>
+      </div>
       <div style={{ background: 'var(--primary)', padding: '40px 24px 32px', textAlign: 'center' }}>
         <div style={{ width: '56px', height: '56px', background: 'rgba(255,255,255,0.15)', borderRadius: '16px', margin: '0 auto 16px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px' }}>🏠</div>
         <h1 style={{ color: '#fff', fontSize: '22px', fontWeight: '700', margin: '0 0 6px' }}>Register Visitor</h1>
