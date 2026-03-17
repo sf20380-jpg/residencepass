@@ -29,6 +29,10 @@ export default function GuardLogin() {
 
   return (
     <div className="app-container">
+      <div className="topbar">
+        <button className="back-btn" onClick={() => window.location.href = '/'}>←</button>
+        <h2>Guard Portal</h2>
+      </div>
       <div style={{ background: 'var(--primary)', padding: '56px 24px 40px', textAlign: 'center' }}>
         <div style={{ width: '64px', height: '64px', background: 'rgba(255,255,255,0.15)', borderRadius: '18px', margin: '0 auto 20px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '28px' }}>🛡️</div>
         <h1 style={{ color: '#fff', fontSize: '22px', fontWeight: '700', margin: '0 0 6px' }}>Guard Portal</h1>
