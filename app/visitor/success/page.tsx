@@ -1,6 +1,7 @@
 'use client'
 import { useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
+import { QRCodeSVG } from 'qrcode.react'
 
 function SuccessContent() {
   const params = useSearchParams()
@@ -9,6 +10,7 @@ function SuccessContent() {
   const unit = params.get('unit')
   const phone = params.get('phone')
   const plate = params.get('plate')
+  const token = params.get('token')
 
   return (
     <div className="app-container">
@@ -22,8 +24,20 @@ function SuccessContent() {
       <div style={{ padding: '16px' }}>
 
         <div className="card" style={{ textAlign: 'center', marginBottom: '12px' }}>
-          <p style={{ fontSize: '12px', color: 'var(--text2)', marginBottom: '12px' }}>One-time pass code</p>
-          <div style={{ fontSize: '42px', fontWeight: '700', letterSpacing: '12px', color: 'var(--primary)', marginBottom: '8px' }}>
+          <p style={{ fontSize: '12px', color: 'var(--text2)', marginBottom: '16px' }}>Scan QR code or use pass code below</p>
+
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
+            <div style={{ padding: '12px', background: '#fff', borderRadius: '12px', display: 'inline-block' }}>
+              <QRCodeSVG
+                value={token || ''}
+                size={160}
+                level="M"
+              />
+            </div>
+          </div>
+
+          <p style={{ fontSize: '12px', color: 'var(--text2)', marginBottom: '8px' }}>or use pass code</p>
+          <div style={{ fontSize: '36px', fontWeight: '700', letterSpacing: '10px', color: 'var(--primary)', marginBottom: '10px' }}>
             {otp}
           </div>
           <div style={{ display: 'inline-block', background: 'var(--warning-light)', color: 'var(--warning)', fontSize: '11px', padding: '3px 10px', borderRadius: '20px', fontWeight: '500' }}>
