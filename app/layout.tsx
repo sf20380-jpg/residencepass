@@ -8,8 +8,8 @@ export const metadata: Metadata = {
   title: '162 Residency',
   description: 'Visitor Management System',
   icons: {
-    icon: '/162residency_logo.gif',
-    apple: '/162residency_logo.gif',
+    icon: '/favicon-32.png',
+    apple: '/icon-192.png',
   }
 };
 
