@@ -5,7 +5,7 @@ export default function Home() {
     <div className="app-container">
 
       <div style={{ background: 'var(--primary)', padding: '56px 24px 40px', textAlign: 'center' }}>
-        <div style={{ marginBottom: '20px' }}>
+        <div style={{ marginBottom: '20px', display: 'flex', justifyContent: 'center' }}>
           <img
             src="/162residency_logo.png"
             alt="162 Residency"
