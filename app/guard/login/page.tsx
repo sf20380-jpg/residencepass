@@ -24,7 +24,12 @@ export default function GuardLogin() {
       return
     }
 
-    window.location.href = '/guard/dashboard'
+    const { data: { user } } = await supabase.auth.getUser()
+    if (user?.email?.startsWith('admin')) {
+      window.location.href = '/admin/dashboard'
+    } else {
+      window.location.href = '/guard/dashboard'
+    }
   }
 
   return (
