@@ -59,9 +59,6 @@ export default function GuardLogin() {
           <button type="submit" className="btn btn-primary" disabled={loading}>
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
-          <button type="button" className="btn btn-outline" onClick={() => window.location.href = '/'}>
-            Back
-          </button>
         </form>
       </div>
     </div>
