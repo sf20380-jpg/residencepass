@@ -94,11 +94,18 @@ export default function AdminDashboard() {
   })
 
   function exportVisitorsCSV() {
-    const headers = ['Name', 'Phone', 'Unit', 'Host', 'Host Phone', 'Plate', 'Purpose', 'Visit Date', 'Expected Time', 'Status']
-    const rows = filteredVisitors.map(v => [
-      v.name, v.phone, v.unit, v.host_name, v.host_phone || '-',
-      v.plate || '-', v.purpose, v.visit_date, v.expected_time || '-', v.status
-    ])
+    const headers = ['Name', 'Phone', 'Unit', 'Host', 'Host Phone', 'Plate', 'Purpose', 'Visit Date', 'Expected Time', 'Status', 'Check-in Time', 'Check-out Time', 'Guard ID', 'Type']
+    const rows = filteredVisitors.map(v => {
+      const c = v.checkins?.[0]
+      return [
+        v.name, v.phone, v.unit, v.host_name, v.host_phone || '-',
+        v.plate || '-', v.purpose, v.visit_date, v.expected_time || '-', v.status,
+        c?.checked_in_at ? new Date(c.checked_in_at).toLocaleString('en-MY') : '-',
+        c?.checked_out_at ? new Date(c.checked_out_at).toLocaleString('en-MY') : '-',
+        c?.guard_id || '-',
+        c?.is_walkin ? 'Walk-in' : 'Pre-registered'
+      ]
+    })
     downloadCSV(headers, rows, `visitors_${fromDate}_to_${toDate}.csv`)
   }
 
@@ -203,7 +210,7 @@ export default function AdminDashboard() {
           ) : filteredVisitors.map((v: any) => {
             const s = statusConfig[v.status] || statusConfig.pending
             return (
-              <div key={v.id} className="card">
+              <div key={v.id} className="card" style={{ cursor: 'pointer' }} onClick={() => window.location.href = `/admin/verify/${v.id}`}>
                 <div className="card-row" style={{ marginBottom: '8px' }}>
                   <div className="avatar">
                     {v.name?.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2) || '??'}
