@@ -15,6 +15,10 @@ function SuccessContent() {
   return (
     <div className="app-container">
 
+      <div className="topbar">
+        <button className="back-btn" onClick={() => window.location.href = '/visitor'}>←</button>
+        <h2>Access Code Ready</h2>
+      </div>
       <div style={{ background: 'var(--primary)', padding: '40px 24px 32px', textAlign: 'center' }}>
         <div style={{ width: '64px', height: '64px', background: 'rgba(255,255,255,0.15)', borderRadius: '50%', margin: '0 auto 16px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '28px' }}>✓</div>
         <h1 style={{ color: '#fff', fontSize: '22px', fontWeight: '700', margin: '0 0 6px' }}>Access Code Ready</h1>
