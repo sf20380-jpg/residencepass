@@ -5,7 +5,7 @@ import { supabase } from '../../lib/supabase'
 export default function VisitorPage() {
   const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({
-    name: '', phone: '', plate: '', unit: '', host_name: '', purpose: 'Family visit', visit_date: '', expected_time: ''
+    name: '', phone: '', plate: '', unit: '', host_name: '', host_phone: '', purpose: 'Family visit', visit_date: '', expected_time: ''
   })
 
   function handleChange(e: any) {
@@ -51,7 +51,7 @@ export default function VisitorPage() {
             <input type="text" name="name" required placeholder="e.g. John Smith" onChange={handleChange} />
           </div>
           <div className="field">
-            <label>Phone Number *</label>
+            <label>Visitor Phone *</label>
             <input type="tel" name="phone" required placeholder="e.g. 012-3456789" onChange={handleChange} />
           </div>
           <div className="field">
@@ -60,11 +60,15 @@ export default function VisitorPage() {
           </div>
           <div className="field">
             <label>Unit to Visit *</label>
-            <input type="text" name="unit" required placeholder="e.g. A-12-5" onChange={handleChange} />
+            <input type="text" name="unit" required placeholder="e.g. A-12-05" onChange={handleChange} />
           </div>
           <div className="field">
             <label>Resident's Name *</label>
             <input type="text" name="host_name" required placeholder="e.g. Sarah Johnson" onChange={handleChange} />
+          </div>
+          <div className="field">
+            <label>Resident's Phone *</label>
+            <input type="tel" name="host_phone" required placeholder="e.g. 012-3456789" onChange={handleChange} />
           </div>
           <div className="field">
             <label>Visit Date *</label>
