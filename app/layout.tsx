@@ -7,6 +7,7 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: '162 Residency',
   description: 'Visitor Management System',
+  manifest: '/manifest.json',
 };
 
 export default function RootLayout({
@@ -16,6 +17,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <meta name="theme-color" content="#185FA5" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="162 Residency" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <link rel="apple-touch-icon" href="/icon-192.png" />
+      </head>
       <body className={inter.className}>{children}</body>
     </html>
   );
