@@ -84,8 +84,8 @@ export default function PassPage({ params }: { params: { token: string } }) {
             </div>
             <div className="info-item">
               <div className="ilbl">Phone</div>
-              <div className="ival">{visitor.phone}</div>
-            </div>
+              <div className="ival">{visitor.phone?.replace(/(\d{3})\d+(\d{2})/, '$1****$2')}</div>
+            </div>>
             <div className="info-item">
               <div className="ilbl">Plate</div>
               <div className="ival">{visitor.plate || '-'}</div>
