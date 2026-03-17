@@ -67,6 +67,14 @@ function SuccessContent() {
           </div>
         </div>
 
+        <button className="btn btn-outline" style={{ background: '#25D366', color: '#fff', border: 'none' }}
+          onClick={() => {
+            const passUrl = `${window.location.origin}/pass/${token}`
+            const message = `Hi! Here is your visitor pass for ${name} to visit unit ${unit}. Please show this to the guard at entrance: ${passUrl}`
+            window.open(`https://wa.me/?text=${encodeURIComponent(message)}`)
+          }}>
+          📲 Share via WhatsApp
+        </button>
         <button className="btn btn-outline" onClick={() => window.location.href = '/visitor'}>
           Register Another Visitor
         </button>
