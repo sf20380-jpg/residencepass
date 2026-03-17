@@ -67,19 +67,22 @@ function SuccessContent() {
           </div>
         </div>
 
-        <button className="btn btn-outline" style={{ background: '#25D366', color: '#fff', border: 'none' }}
+        <button className="btn btn-outline" style={{ background: '#185FA5', color: '#fff', border: 'none' }}
           onClick={() => {
             const passUrl = `${window.location.origin}/pass/${token}`
-            const message = `Hi! Here is your visitor pass for ${name} to visit unit ${unit}. Please show this to the guard at entrance: ${passUrl}`
-            window.open(`https://wa.me/?text=${encodeURIComponent(message)}`)
+            const message = `Your visitor pass for unit ${unit} — show this to the guard at entrance: ${passUrl}`
+            if (navigator.share) {
+              navigator.share({
+                title: 'Visitor Pass',
+                text: message,
+                url: passUrl
+              })
+            } else {
+              navigator.clipboard.writeText(passUrl)
+              alert('Link copied to clipboard!')
+            }
           }}>
-          📲 Share via WhatsApp
-        </button>
-        <button className="btn btn-outline" onClick={() => window.location.href = '/visitor'}>
-          Register Another Visitor
-        </button>
-        <button className="btn btn-primary" onClick={() => window.location.href = '/'}>
-          Back to Home
+          🔗 Share Pass
         </button>
 
       </div>
