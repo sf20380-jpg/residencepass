@@ -8,10 +8,12 @@ export default function AdminDashboard() {
   const [search, setSearch] = useState('')
   const [fromDate, setFromDate] = useState(new Date().toISOString().split('T')[0])
   const [toDate, setToDate] = useState(new Date().toISOString().split('T')[0])
+  const [todayStats, setTodayStats] = useState({ total: 0, inside: 0, checkedOut: 0 })
 
   useEffect(() => {
     checkAuth()
     fetchVisitors()
+    fetchTodayStats()
   }, [])
 
   async function checkAuth() {
@@ -19,6 +21,21 @@ export default function AdminDashboard() {
     if (!user || !user.email?.startsWith('admin')) {
       window.location.href = '/guard/login'
       return
+    }
+  }
+
+  async function fetchTodayStats() {
+    const today = new Date().toISOString().split('T')[0]
+    const { data } = await supabase
+      .from('visitors')
+      .select('status')
+      .eq('visit_date', today)
+    if (data) {
+      setTodayStats({
+        total: data.length,
+        inside: data.filter(v => v.status === 'inside').length,
+        checkedOut: data.filter(v => v.status === 'checked_out').length
+      })
     }
   }
 
@@ -49,11 +66,6 @@ export default function AdminDashboard() {
     )
   })
 
-  const today = new Date().toISOString().split('T')[0]
-  const todayVisitors = visitors.filter(v => v.visit_date === today)
-  const inside = todayVisitors.filter(v => v.status === 'inside')
-  const checkedOut = todayVisitors.filter(v => v.status === 'checked_out')
-
   function exportCSV() {
     const headers = ['Name', 'Phone', 'Unit', 'Host', 'Host Phone', 'Plate', 'Purpose', 'Visit Date', 'Expected Time', 'Status']
     const rows = filtered.map(v => [
@@ -68,7 +80,6 @@ export default function AdminDashboard() {
       v.expected_time || '-',
       v.status
     ])
-
     const csv = [headers, ...rows].map(r => r.map((c: any) => `"${c}"`).join(',')).join('\n')
     const blob = new Blob([csv], { type: 'text/csv' })
     const url = URL.createObjectURL(blob)
@@ -94,12 +105,11 @@ export default function AdminDashboard() {
         <button className="logout-btn" onClick={handleLogout}>Sign out</button>
       </div>
 
-      {/* Stats */}
       <div className="stats-grid">
         {[
-          { num: todayVisitors.length, label: 'Today total', color: 'var(--primary)' },
-          { num: inside.length, label: 'Inside now', color: 'var(--success)' },
-          { num: checkedOut.length, label: 'Checked out', color: 'var(--gray)' },
+          { num: todayStats.total, label: 'Today total', color: 'var(--primary)' },
+          { num: todayStats.inside, label: 'Inside now', color: 'var(--success)' },
+          { num: todayStats.checkedOut, label: 'Checked out', color: 'var(--gray)' },
         ].map((s, i) => (
           <div key={i} className="stat-card">
             <div className="num" style={{ color: s.color }}>{s.num}</div>
@@ -108,7 +118,6 @@ export default function AdminDashboard() {
         ))}
       </div>
 
-      {/* Filter */}
       <div style={{ padding: '14px 16px 0' }}>
         <div className="card">
           <div className="sec-hdr">Filter by date</div>
@@ -130,7 +139,6 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Search */}
       <div className="search-wrap">
         <div style={{ position: 'relative' }}>
           <span className="search-icon">🔍</span>
@@ -139,14 +147,12 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Export */}
       <div style={{ padding: '8px 16px 0' }}>
         <button className="btn btn-outline" onClick={exportCSV}>
-          📊 Export to Excel / CSV ({filtered.length} records)
+          📊 Export CSV ({filtered.length} records)
         </button>
       </div>
 
-      {/* List */}
       <div className="content">
         {loading ? (
           <p style={{ textAlign: 'center', padding: '32px', opacity: 0.5, fontSize: '13px' }}>Loading...</p>
