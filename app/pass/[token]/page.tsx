@@ -35,6 +35,10 @@ export default function PassPage({ params }: { params: { token: string } }) {
   return (
     <div className="app-container">
 
+      <div className="topbar">
+        <button className="back-btn" onClick={() => window.location.href = '/'}>←</button>
+        <h2>Visitor Pass</h2>
+      </div>
       <div style={{ background: isExpired ? 'var(--gray)' : isInside ? 'var(--success)' : 'var(--primary)', padding: '40px 24px 32px', textAlign: 'center' }}>
         <div style={{ width: '56px', height: '56px', background: 'rgba(255,255,255,0.15)', borderRadius: '16px', margin: '0 auto 16px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px' }}>
           {isExpired ? '✗' : isInside ? '✓' : '🎫'}
