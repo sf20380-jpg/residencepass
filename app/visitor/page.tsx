@@ -15,10 +15,8 @@ export default function VisitorPage() {
   const [unitFloor, setUnitFloor] = useState('')
   const [unitNo, setUnitNo] = useState('')
 
-  // Helper: capitalize each word
-  function toTitleCase(str: string) {
-    return str.replace(/\b\w/g, c => c.toUpperCase())
-  }
+  // Frequent visitor suggestion
+  const [suggestion, setSuggestion] = useState<any>(null)
 
   // Helper: strip non-digits from phone
   function cleanPhone(str: string) {
@@ -49,19 +47,65 @@ export default function VisitorPage() {
     setForm({ ...form, [name]: processed })
   }
 
+  // Search for previous visit when phone is filled
+  async function handlePhoneBlur() {
+    const phone = form.phone.trim()
+    if (phone.length < 9) return
+
+    const { data } = await supabase
+      .from('visitors')
+      .select('name, phone, plate, unit, host_name, host_phone')
+      .eq('phone', phone)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single()
+
+    if (data) {
+      setSuggestion(data)
+    } else {
+      setSuggestion(null)
+    }
+  }
+
+  // Auto-fill form from suggestion
+  function applySuggestion() {
+    if (!suggestion) return
+
+    // Parse unit back into block/floor/unitNo
+    const parts = suggestion.unit?.split('-') || []
+    const block = parts[0] || ''
+    const floor = parts[1] || ''
+    const no = parts[2] || ''
+
+    setUnitBlock(block)
+    setUnitFloor(floor)
+    setUnitNo(no)
+
+    setForm(f => ({
+      ...f,
+      name: suggestion.name || '',
+      plate: suggestion.plate || '',
+      unit: suggestion.unit || '',
+      host_name: suggestion.host_name || '',
+      host_phone: suggestion.host_phone || '',
+    }))
+
+    setSuggestion(null)
+  }
+
   // Update combined unit whenever any part changes
   function handleUnitBlock(e: any) {
     const val = e.target.value
     setUnitBlock(val)
-    const combined = `${val}-${unitFloor}-${unitNo.toUpperCase()}`
-    setForm(f => ({ ...f, unit: combined }))
+    setForm(f => ({ ...f, unit: `${val}-${unitFloor}-${unitNo.toUpperCase()}` }))
   }
+
   function handleUnitFloor(e: any) {
     const val = e.target.value
     setUnitFloor(val)
-    const combined = `${unitBlock}-${val}-${unitNo.toUpperCase()}`
-    setForm(f => ({ ...f, unit: combined }))
+    setForm(f => ({ ...f, unit: `${unitBlock}-${val}-${unitNo.toUpperCase()}` }))
   }
+
   function handleUnitNo(e: any) {
     const raw = e.target.value.toUpperCase()
     setUnitNo(raw)
@@ -78,7 +122,6 @@ export default function VisitorPage() {
   async function handleSubmit(e: any) {
     e.preventDefault()
 
-    // Validate unit
     if (!unitBlock || !unitFloor || !unitNo.trim()) {
       alert('Please complete the unit (Block, Floor & Unit No.)')
       return
@@ -88,7 +131,6 @@ export default function VisitorPage() {
 
     const otp = Math.floor(1000 + Math.random() * 9000).toString()
     const token = crypto.randomUUID()
-
     const finalUnit = `${unitBlock}-${unitFloor}-${formatUnitNo(unitNo.trim().toUpperCase())}`
 
     const { data, error } = await supabase.from('visitors').insert([{
@@ -141,27 +183,72 @@ export default function VisitorPage() {
       <div style={{ padding: '20px 16px' }}>
         <form onSubmit={handleSubmit}>
 
-          {/* Visitor Name */}
-          <div className="field">
-            <label>Visitor Name *</label>
-            <input
-              type="text" name="name" required
-              placeholder="e.g. Ahmad Bin Ali"
-              value={form.name}
-              onChange={handleChange} />
-          </div>
-
-          {/* Visitor Phone */}
+          {/* Visitor Phone — first field, triggers suggestion */}
           <div className="field">
             <label>Visitor Phone *</label>
             <input
               type="tel" name="phone" required
               placeholder="e.g. 0123456789"
               value={form.phone}
-              onChange={handleChange} />
+              onChange={handleChange}
+              onBlur={handlePhoneBlur} />
             <span style={{ fontSize: '11px', color: 'var(--text2)', marginTop: '4px', display: 'block' }}>
               Digits only, no dashes (e.g. 0123456789)
             </span>
+          </div>
+
+          {/* Frequent visitor suggestion card */}
+          {suggestion && (
+            <div style={{
+              background: 'var(--primary-light)',
+              border: '1.5px solid var(--primary)',
+              borderRadius: '12px',
+              padding: '12px 14px',
+              marginBottom: '16px',
+            }}>
+              <p style={{ fontSize: '12px', color: 'var(--primary)', fontWeight: '600', margin: '0 0 8px' }}>
+                🔁 Returning visitor found
+              </p>
+              <div style={{ fontSize: '13px', color: 'var(--text)', marginBottom: '10px' }}>
+                <div><strong>{suggestion.name}</strong></div>
+                <div style={{ color: 'var(--text2)', fontSize: '12px' }}>
+                  {suggestion.plate ? `Plate: ${suggestion.plate}` : 'No plate'} · Unit: {suggestion.unit}
+                </div>
+                <div style={{ color: 'var(--text2)', fontSize: '12px' }}>
+                  Host: {suggestion.host_name} · {suggestion.host_phone}
+                </div>
+              </div>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button
+                  type="button"
+                  onClick={applySuggestion}
+                  style={{
+                    flex: 1, padding: '8px', background: 'var(--primary)', color: '#fff',
+                    border: 'none', borderRadius: '8px', fontSize: '13px', fontWeight: '600', cursor: 'pointer'
+                  }}>
+                  Yes, use this
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSuggestion(null)}
+                  style={{
+                    flex: 1, padding: '8px', background: 'transparent', color: 'var(--text2)',
+                    border: '1px solid var(--border)', borderRadius: '8px', fontSize: '13px', cursor: 'pointer'
+                  }}>
+                  No, fill manually
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Visitor Name */}
+          <div className="field">
+            <label>Visitor Name *</label>
+            <input
+              type="text" name="name" required
+              placeholder="e.g. AHMAD BIN ALI"
+              value={form.name}
+              onChange={handleChange} />
           </div>
 
           {/* Vehicle Plate */}
@@ -178,7 +265,6 @@ export default function VisitorPage() {
           <div className="field">
             <label>Unit to Visit *</label>
             <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-              {/* Block */}
               <select value={unitBlock} onChange={handleUnitBlock} style={selectStyle} required>
                 <option value="">Block</option>
                 <option value="A">A</option>
@@ -188,7 +274,6 @@ export default function VisitorPage() {
 
               <span style={{ color: 'var(--text2)', fontWeight: '600' }}>-</span>
 
-              {/* Tingkat */}
               <select value={unitFloor} onChange={handleUnitFloor} style={selectStyle} required>
                 <option value="">Floor</option>
                 {Array.from({ length: 9 }, (_, i) => i + 1).map(n => (
@@ -198,7 +283,6 @@ export default function VisitorPage() {
 
               <span style={{ color: 'var(--text2)', fontWeight: '600' }}>-</span>
 
-              {/* No. Unit — manual, auto uppercase */}
               <input
                 type="text"
                 placeholder="No."
@@ -218,7 +302,6 @@ export default function VisitorPage() {
               />
             </div>
 
-            {/* Preview */}
             {unitBlock && unitFloor && unitNo && (
               <span style={{ fontSize: '12px', color: 'var(--primary)', marginTop: '6px', display: 'block', fontWeight: '600' }}>
                 ✓ Unit: {unitBlock}-{unitFloor}-{formatUnitNo(unitNo.toUpperCase())}
@@ -231,7 +314,7 @@ export default function VisitorPage() {
             <label>Resident's Name *</label>
             <input
               type="text" name="host_name" required
-              placeholder="e.g. Sarah Johnson"
+              placeholder="e.g. SARAH JOHNSON"
               value={form.host_name}
               onChange={handleChange} />
           </div>
