@@ -67,7 +67,7 @@ export default function VisitorPage() {
 
     // Validate unit
     if (!unitBlock || !unitFloor || !unitNo.trim()) {
-      alert('Sila lengkapkan unit (Block, Tingkat & No. Unit)')
+      alert('Please complete the unit (Block, Floor & Unit No.)')
       return
     }
 
@@ -147,7 +147,7 @@ export default function VisitorPage() {
               value={form.phone}
               onChange={handleChange} />
             <span style={{ fontSize: '11px', color: 'var(--text2)', marginTop: '4px', display: 'block' }}>
-              Nombor sahaja, tiada tanda "-" (cth: 0123456789)
+              Digits only, no dashes (e.g. 0123456789)
             </span>
           </div>
 
@@ -177,7 +177,7 @@ export default function VisitorPage() {
 
               {/* Tingkat */}
               <select value={unitFloor} onChange={handleUnitFloor} style={selectStyle} required>
-                <option value="">Tkt</option>
+                <option value="">Floor</option>
                 {Array.from({ length: 9 }, (_, i) => i + 1).map(n => (
                   <option key={n} value={String(n)}>{n}</option>
                 ))}
@@ -231,7 +231,7 @@ export default function VisitorPage() {
               value={form.host_phone}
               onChange={handleChange} />
             <span style={{ fontSize: '11px', color: 'var(--text2)', marginTop: '4px', display: 'block' }}>
-              Nombor sahaja, tiada tanda "-" (cth: 0123456789)
+              Digits only, no dashes (e.g. 0123456789)
             </span>
           </div>
 
