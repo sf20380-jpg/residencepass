@@ -59,7 +59,13 @@ export default function WalkInPage() {
   }
   function handleUnitNo(e: any) {
     const raw = e.target.value.toUpperCase()
-    const formatted = formatUnitNo(raw)
+    setUnitNo(raw)
+    setForm(f => ({ ...f, unit: `${unitBlock}-${unitFloor}-${raw}` }))
+  }
+
+  function handleUnitNoBlur() {
+    if (!unitNo) return
+    const formatted = formatUnitNo(unitNo)
     setUnitNo(formatted)
     setForm(f => ({ ...f, unit: `${unitBlock}-${unitFloor}-${formatted}` }))
   }
@@ -197,6 +203,7 @@ export default function WalkInPage() {
                 placeholder="No."
                 value={unitNo}
                 onChange={handleUnitNo}
+                onBlur={handleUnitNoBlur}
                 style={{
                   flex: 1,
                   padding: '10px 8px',
