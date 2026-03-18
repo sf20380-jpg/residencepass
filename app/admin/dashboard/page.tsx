@@ -73,8 +73,14 @@ export default function AdminDashboard() {
     window.location.href = '/guard/login'
   }
 
+  function normalizeUnitSearch(q: string) {
+    return q.replace(/-(\d+)([a-zA-Z]*)$/, (_, num, letters) => {
+      return '-' + num.padStart(2, '0') + letters
+    })
+  }
+
   const filteredVisitors = visitors.filter(v => {
-    const q = search.toLowerCase()
+    const q = normalizeUnitSearch(search.toLowerCase())
     return (
       v.name?.toLowerCase().includes(q) ||
       v.unit?.toLowerCase().includes(q) ||
