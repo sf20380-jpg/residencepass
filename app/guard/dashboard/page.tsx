@@ -49,15 +49,21 @@ export default function GuardDashboard() {
     window.location.href = '/guard/login'
   }
 
-  const filtered = visitors.filter(v => {
-    const q = search.toLowerCase()
-    return (
-      v.name?.toLowerCase().includes(q) ||
-      v.unit?.toLowerCase().includes(q) ||
-      v.plate?.toLowerCase().includes(q) ||
-      v.otp_code?.includes(q)
-    )
+  function normalizeUnitSearch(q: string) {
+  return q.replace(/-(\d+)([a-zA-Z]*)$/, (_, num, letters) => {
+    return '-' + num.padStart(2, '0') + letters
   })
+}
+
+const filtered = visitors.filter(v => {
+  const q = normalizeUnitSearch(search.toLowerCase())
+  return (
+    v.name?.toLowerCase().includes(q) ||
+    v.unit?.toLowerCase().includes(q) ||
+    v.plate?.toLowerCase().includes(q) ||
+    v.otp_code?.includes(q)
+  )
+})
 
   const filteredDeliveries = deliveries.filter(d => {
     const q = search.toLowerCase()
