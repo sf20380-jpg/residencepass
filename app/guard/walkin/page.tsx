@@ -35,7 +35,7 @@ export default function WalkInPage() {
     let processed = value
 
     if (name === 'name' || name === 'host_name') {
-      processed = toTitleCase(value)
+      processed = value.toUpperCase()
     }
     if (name === 'phone') {
       processed = cleanPhone(value)
