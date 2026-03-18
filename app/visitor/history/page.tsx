@@ -70,7 +70,7 @@ export default function HistoryPage() {
             <input
               type="tel"
               required
-              placeholder="e.g. 012-3456789"
+              placeholder="e.g. 0123456789"
               value={phone}
               onChange={e => setPhone(e.target.value)} />
           </div>
