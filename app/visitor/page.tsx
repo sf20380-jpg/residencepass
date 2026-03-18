@@ -37,7 +37,7 @@ export default function VisitorPage() {
     let processed = value
 
     if (name === 'name' || name === 'host_name') {
-      processed = toTitleCase(value)
+      processed = value.toUpperCase()
     }
     if (name === 'phone' || name === 'host_phone') {
       processed = cleanPhone(value)
