@@ -23,6 +23,13 @@ export default function WalkInPage() {
     return str.replace(/\D/g, '')
   }
 
+  // Helper: pad unit number to 2 digits, preserve trailing letters (e.g. 2→02, 3A→03A, 12→12)
+  function formatUnitNo(str: string) {
+    return str.replace(/^(\d+)([A-Z]*)$/, (_, num, letters) => {
+      return num.padStart(2, '0') + letters
+    })
+  }
+
   function handleChange(e: any) {
     const { name, value } = e.target
     let processed = value
@@ -51,9 +58,10 @@ export default function WalkInPage() {
     setForm(f => ({ ...f, unit: `${unitBlock}-${val}-${unitNo.toUpperCase()}` }))
   }
   function handleUnitNo(e: any) {
-    const val = e.target.value.toUpperCase()
-    setUnitNo(val)
-    setForm(f => ({ ...f, unit: `${unitBlock}-${unitFloor}-${val}` }))
+    const raw = e.target.value.toUpperCase()
+    const formatted = formatUnitNo(raw)
+    setUnitNo(formatted)
+    setForm(f => ({ ...f, unit: `${unitBlock}-${unitFloor}-${formatted}` }))
   }
 
   async function handleSubmit(e: any) {
@@ -72,7 +80,7 @@ export default function WalkInPage() {
     const otp = Math.floor(1000 + Math.random() * 9000).toString()
     const token = crypto.randomUUID()
     const today = new Date().toISOString().split('T')[0]
-    const finalUnit = `${unitBlock}-${unitFloor}-${unitNo.trim().toUpperCase()}`
+    const finalUnit = `${unitBlock}-${unitFloor}-${formatUnitNo(unitNo.trim().toUpperCase())}`
 
     const { data: visitor, error } = await supabase.from('visitors').insert([{
       ...form,
@@ -204,7 +212,7 @@ export default function WalkInPage() {
 
             {unitBlock && unitFloor && unitNo && (
               <span style={{ fontSize: '12px', color: 'var(--primary)', marginTop: '6px', display: 'block', fontWeight: '600' }}>
-                ✓ Unit: {unitBlock}-{unitFloor}-{unitNo.toUpperCase()}
+                ✓ Unit: {unitBlock}-{unitFloor}-{formatUnitNo(unitNo.toUpperCase())}
               </span>
             )}
           </div>
